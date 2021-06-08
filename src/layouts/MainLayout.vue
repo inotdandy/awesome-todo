@@ -19,11 +19,18 @@
       </q-toolbar>
     </q-header>
 
+    <q-footer>
+        <q-tabs>
+          <q-route-tab v-for="nav in navs" :key="nav.label" :to="nav.to" :icon="nav.icon" :label="nav.todo" />
+        </q-tabs>
+      </q-footer>
+
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
       bordered
       content-class="bg-grey-1"
+      :breakpoint="767"
     >
       <q-list>
         <q-item-label
@@ -32,11 +39,14 @@
         >
           Navigation
         </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+
+        <q-item clickable v-for="nav in navs" :key="nav.label" :to="nav.to">
+          <q-item-section avatar>
+            <q-icon color="primary" :name="nav.icon" />
+          </q-item-section>
+
+          <q-item-section>{{ nav.label }}</q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -47,29 +57,32 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksData = [
-  {
-    title: 'Todo',
-    icon: 'list',
-    link: '/todo'
-  },
-  {
-    title: 'Settings',
-    icon: 'settings',
-    link: '/setting'
-  }
-];
 
 export default {
   name: 'MainLayout',
-  components: { EssentialLink },
   data () {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData
+      navs: [
+        {
+          label: 'Todo',
+          icon: 'list',
+          to: '/todo'
+        },
+        {
+          label: 'Settings',
+          icon: 'settings',
+          to: '/setting'
+        }
+      ]
     }
   }
 }
 </script>
+<style>
+@media screen and (min-width: 768px){
+  .q-footer{
+    display: none;
+  }
+}
+</style>
