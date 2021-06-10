@@ -8,3 +8,8 @@ export default {
   name: 'App'
 }
 </script>
+<style>
+  .strike-through{
+    text-decoration: line-through;
+  }
+</style>
