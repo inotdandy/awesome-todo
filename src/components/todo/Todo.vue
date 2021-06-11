@@ -2,7 +2,7 @@
     <q-item 
       v-ripple 
       clickable 
-      @click="todo.completed = !todo.completed"
+      @click="updateTodos({id,updates: {completed : !todo.completed}})"
       :class="!todo.completed ? 'bg-orange-1' : 'bg-green-1'">
         <q-item-section side top>
           <q-checkbox v-model="todo.completed" />
@@ -33,13 +33,39 @@
             </div>
           </div>
         </q-item-section>
+
+         <q-item-section>
+           <q-btn flat round color="red" icon="delete" dense @click.stop="promptToDelete(id)"/>
+        </q-item-section>
+
       </q-item>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
     name: 'Todo',
-    props: ['todo', 'id']
+    props: ['todo', 'id'],
+    methods: {
+      ...mapActions('todos', ['updateTodos', 'deleteTodos']),
+      promptToDelete(id){
+          this.$q.dialog({
+              title: 'Confirm',
+              message: 'Would you like to delete this todo?',
+              cancel: true,
+              persistent: true
+            }).onOk(() => {
+              this.deleteTodos(id)
+            }).onOk(() => {
+              // console.log('>>>> second OK catcher')
+            }).onCancel(() => {
+              // console.log('>>>> Cancel')
+            }).onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            })
+      }
+    }
 }
 </script>
 

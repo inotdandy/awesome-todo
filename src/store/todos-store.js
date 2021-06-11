@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 const state = {
     todos: {
       'ID1' : {
@@ -22,9 +24,23 @@ const state = {
     
 }
 
-const mutations = {}
+const mutations = {
+  updateTodos : (state, payload) => {
+    Object.assign(state.todos[payload.id], payload.updates);
+  },
+  deleteTodos : (state, id) => {
+    Vue.delete(state.todos, id)
+  }
+}
 
-const actions = {}
+const actions = {
+  updateTodos({commit}, payload){
+    commit('updateTodos', payload)
+  },
+  deleteTodos({commit}, id){
+    commit('deleteTodos', id)
+  }
+}
 
 const getters = {
     todos : (state) => {
